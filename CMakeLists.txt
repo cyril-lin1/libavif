@@ -39,7 +39,7 @@ option(AVIF_CODEC_SVT "Use the SVT-AV1 codec for encoding" OFF)
 option(AVIF_CODEC_AOM_DECODE "if AVIF_CODEC_AOM is on, use/offer libaom's decoder" ON)
 option(AVIF_CODEC_AOM_ENCODE "if AVIF_CODEC_AOM is on, use/offer libaom's encoder" ON)
 
-option(AVIF_LOCAL_AOM "Build the AOM codec by providing your own copy of the repo in ext/aom (see Local Builds in README)" OFF)
+option(AVIF_LOCAL_AOM "Build the AOM codec by providing your own copy of the repo in ext/aom (see Local Builds in README)" ON)
 option(AVIF_LOCAL_DAV1D "Build the dav1d codec by providing your own copy of the repo in ext/dav1d (see Local Builds in README)" OFF)
 option(AVIF_LOCAL_LIBGAV1 "Build the libgav1 codec by providing your own copy of the repo in ext/libgav1 (see Local Builds in README)" OFF)
 option(AVIF_LOCAL_RAV1E "Build the rav1e codec by providing your own copy of the repo in ext/rav1e (see Local Builds in README)" OFF)
@@ -430,7 +430,7 @@ if(BUILD_SHARED_LIBS)
     endif()
 endif()
 
-option(AVIF_BUILD_EXAMPLES "Build avif Examples." OFF)
+option(AVIF_BUILD_EXAMPLES "Build avif Examples." ON)
 if(AVIF_BUILD_EXAMPLES)
     set(AVIF_EXAMPLES
         avif_example_decode_memory
@@ -438,9 +438,15 @@ if(AVIF_BUILD_EXAMPLES)
         avif_example_decode_streaming
         avif_example_encode
     )
+	
+	set(AVIF_TEST_SRCS
+			examples/bmp.c
+			examples/psnr.c
+			examples/time-measure.c
+    )
 
     foreach(EXAMPLE ${AVIF_EXAMPLES})
-        add_executable(${EXAMPLE} examples/${EXAMPLE}.c)
+        add_executable(${EXAMPLE} examples/${EXAMPLE}.c ${AVIF_TEST_SRCS})
         if(AVIF_LOCAL_LIBGAV1)
             set_target_properties(${EXAMPLE} PROPERTIES LINKER_LANGUAGE "CXX")
         endif()
